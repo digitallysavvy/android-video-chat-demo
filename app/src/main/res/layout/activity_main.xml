@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-
     <FrameLayout
         android:id="@+id/bg_video_container"
         android:layout_width="fill_parent"

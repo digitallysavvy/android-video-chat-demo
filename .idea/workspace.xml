@@ -8,18 +8,20 @@
   <component name="GradleLocalSettings">
     <option name="projectSyncType">
       <map>
+        <entry key="$USER_HOME$/AndroidStudioProjects/agora-android-demo" value="PREVIEW" />
+        <entry key="$PROJECT_DIR$/../siper" value="PREVIEW" />
         <entry key="$USER_HOME$/Desktop/Agora_Native_SDK_for_Android_FULL/samples/Agora-Android-Tutorial-1to1" value="PREVIEW" />
       </map>
     </option>
   </component>
-  <component name="ProjectFrameBounds">
-    <option name="x" value="34" />
-    <option name="y" value="58" />
-    <option name="width" value="1583" />
-    <option name="height" value="1035" />
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="y" value="23" />
+    <option name="width" value="1920" />
+    <option name="height" value="1109" />
   </component>
   <component name="PropertiesComponent">
     <property name="android.sdk.path" value="$USER_HOME$/Library/Android/sdk" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="AndroidSdkUpdater" />
   </component>
   <component name="RunManager">
