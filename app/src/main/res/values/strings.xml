@@ -1,4 +1,4 @@
 <resources>
-    <string name="app_name">Agora - 1:1 Video Call</string>
+    <string name="app_name">Agora - Telcom Example</string>
     <string name="agora_app_id">{AGORA ID}</string>
 </resources>
