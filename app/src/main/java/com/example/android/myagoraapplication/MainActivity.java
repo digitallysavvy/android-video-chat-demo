@@ -111,7 +111,6 @@ public class MainActivity extends AppCompatActivity {
         SurfaceView videoSurface = RtcEngine.CreateRendererView(getBaseContext());
         videoSurface.setZOrderMediaOverlay(true);
         videoContainer.addView(videoSurface);
-        videoSurface.set
         mRtcEngine.setupLocalVideo(new VideoCanvas(videoSurface, VideoCanvas.RENDER_MODE_FIT, 0));
     }
 
