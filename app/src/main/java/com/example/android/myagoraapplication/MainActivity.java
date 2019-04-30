@@ -26,11 +26,11 @@ public class MainActivity extends AppCompatActivity {
 
     private RtcEngine mRtcEngine;
 
-    private static final String LOG_TAG = MainActivity.class.getSimpleName();
-
     // Permissions
     private static final int PERMISSION_REQ_ID = 22;
     private static final String[] REQUESTED_PERMISSIONS = {Manifest.permission.RECORD_AUDIO, Manifest.permission.CAMERA};
+
+    private static final String LOG_TAG = MainActivity.class.getSimpleName();
 
     // Handle SDK Events
     private final IRtcEngineEventHandler mRtcEventHandler = new IRtcEngineEventHandler() {
@@ -84,11 +84,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initAgoraEngine() {
-        initializeAgoraEngine();
-        setupSession();
-    }
-
-    private void initializeAgoraEngine() {
         try {
             mRtcEngine = RtcEngine.create(getBaseContext(), getString(R.string.agora_app_id), mRtcEventHandler);
         } catch (Exception e) {
@@ -96,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
 
             throw new RuntimeException("NEED TO check rtc sdk init fatal error\n" + Log.getStackTraceString(e));
         }
+        setupSession();
     }
 
     private void setupSession() {
@@ -119,9 +115,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupRemoteVideoStream(int uid) {
-        // setup container for the remote user
+        // setup ui element for the remote stream
         FrameLayout videoContainer = findViewById(R.id.bg_video_container);
-
+        // ignore any new streams that join the session
         if (videoContainer.getChildCount() >= 1) {
             return;
         }
@@ -131,26 +127,6 @@ public class MainActivity extends AppCompatActivity {
         mRtcEngine.setupRemoteVideo(new VideoCanvas(videoSurface, VideoCanvas.RENDER_MODE_FIT, uid));
         mRtcEngine.setRemoteSubscribeFallbackOption(io.agora.rtc.Constants.STREAM_FALLBACK_OPTION_AUDIO_ONLY);
 
-    }
-
-    // join the channel when user clicks UI button
-    public void onjoinChannelClicked(View view) {
-        findViewById(R.id.joinBtn).setVisibility(View.GONE); // set the join button hidden
-        findViewById(R.id.audioBtn).setVisibility(View.VISIBLE); // set the audio button hidden
-        findViewById(R.id.leaveBtn).setVisibility(View.VISIBLE); // set the leave button hidden
-        findViewById(R.id.videoBtn).setVisibility(View.VISIBLE); // set the video button hidden
-        mRtcEngine.joinChannel(null, "family", "Extra Optional Data", 0); // if you do not specify the uid, Agora will assign one.
-        setupLocalVideoFeed();
-    }
-
-    public void onLeaveChannelClicked(View view) {
-        removeVideo(R.id.floating_video_container);
-        removeVideo(R.id.bg_video_container);
-        findViewById(R.id.joinBtn).setVisibility(View.VISIBLE); // set the join button visible
-        findViewById(R.id.audioBtn).setVisibility(View.GONE); // set the audio button hidden
-        findViewById(R.id.leaveBtn).setVisibility(View.GONE); // set the leave button hidden
-        findViewById(R.id.videoBtn).setVisibility(View.GONE); // set the video button hidden
-        leaveChannel();
     }
 
     public void onAudioMuteClicked(View view) {
@@ -185,8 +161,33 @@ public class MainActivity extends AppCompatActivity {
         videoSurface.setVisibility(btn.isSelected() ? View.GONE : View.VISIBLE);
     }
 
+    // join the channel when user clicks UI button
+    public void onjoinChannelClicked(View view) {
+        mRtcEngine.joinChannel(null, "test-channel", "Extra Optional Data", 0); // if you do not specify the uid, Agora will assign one.
+        setupLocalVideoFeed();
+        findViewById(R.id.joinBtn).setVisibility(View.GONE); // set the join button hidden
+        findViewById(R.id.audioBtn).setVisibility(View.VISIBLE); // set the audio button hidden
+        findViewById(R.id.leaveBtn).setVisibility(View.VISIBLE); // set the leave button hidden
+        findViewById(R.id.videoBtn).setVisibility(View.VISIBLE); // set the video button hidden
+    }
+
+    public void onLeaveChannelClicked(View view) {
+        leaveChannel();
+        removeVideo(R.id.floating_video_container);
+        removeVideo(R.id.bg_video_container);
+        findViewById(R.id.joinBtn).setVisibility(View.VISIBLE); // set the join button visible
+        findViewById(R.id.audioBtn).setVisibility(View.GONE); // set the audio button hidden
+        findViewById(R.id.leaveBtn).setVisibility(View.GONE); // set the leave button hidden
+        findViewById(R.id.videoBtn).setVisibility(View.GONE); // set the video button hidden
+    }
+
     private void leaveChannel() {
         mRtcEngine.leaveChannel();
+    }
+
+    private void removeVideo(int containerID) {
+        FrameLayout videoContainer = findViewById(containerID);
+        videoContainer.removeAllViews();
     }
 
     private void onRemoteUserVideoToggle(int uid, boolean toggle) {
@@ -212,10 +213,7 @@ public class MainActivity extends AppCompatActivity {
         removeVideo(R.id.bg_video_container);
     }
 
-    private void removeVideo(int containerID) {
-        FrameLayout videoContainer = findViewById(containerID);
-        videoContainer.removeAllViews();
-    }
+
 
     public boolean checkSelfPermission(String permission, int requestCode) {
         Log.i(LOG_TAG, "checkSelfPermission " + permission + " " + requestCode);
@@ -240,7 +238,7 @@ public class MainActivity extends AppCompatActivity {
         switch (requestCode) {
             case PERMISSION_REQ_ID: {
                 if (grantResults[0] != PackageManager.PERMISSION_GRANTED || grantResults[1] != PackageManager.PERMISSION_GRANTED) {
-                    showLongToast("Need permissions " + Manifest.permission.RECORD_AUDIO + "/" + Manifest.permission.CAMERA);
+                    Log.i(LOG_TAG, "Need permissions " + Manifest.permission.RECORD_AUDIO + "/" + Manifest.permission.CAMERA);
                     break;
                 }
 
