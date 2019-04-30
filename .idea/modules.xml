@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/agora-android-demo.iml" filepath="$PROJECT_DIR$/agora-android-demo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/android-video-chat-demo.iml" filepath="$PROJECT_DIR$/android-video-chat-demo.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
