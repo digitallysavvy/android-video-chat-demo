@@ -1,5 +1,5 @@
 # agora-android-demo
-Simple demo showcasing the Agora.io SDK for adding video chat capabilites to any Android based app. 
+Simple demo showcasing the Agora.io SDK for adding video chat capabilities to any Android based app. 
 
 
 This repo is part of a tutorial posted on Medium. For an in depth explanaition of how to build your own version please read:
