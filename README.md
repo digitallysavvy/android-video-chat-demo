@@ -1,5 +1,3 @@
-![Java CI with Gradle](https://github.com/digitallysavvy/android-video-chat-demo/workflows/Java%20CI%20with%20Gradle/badge.svg)
-
 # How to: Build a Video Chat App on Android
 ![](https://miro.medium.com/max/1400/1*ClShkBecKfk93aWQM5ni_w.jpeg)  
 In this repo, we’ll build a basic video chat app in 10 easy steps, using the [Agora.io Video SDK](https://docs.agora.io/en/Video/product_video?platform=All%20Platforms) for Android.
@@ -349,3 +347,10 @@ public void onVideoMuteClicked(View view) {
 ![Done](https://miro.medium.com/max/996/0*4morLI6MnOOzQUyx)
 I hope you enjoyed reading along and working together on creating a 1-to-1 Video Chat Android app using the [Agora.io Video SDK](https://docs.agora.io/en/Video/product_video?platform=All%20Platforms).
 
+=======
+This repo is part of a tutorial posted on Medium. For an in depth explanation of how to build your own version please read:
+https://medium.com/agora-io/1-to-1-video-chat-app-on-android-using-agora-io-3c2fe6c42fb4
+
+***Requirements:***
+- Agora.io Developer Account (https://dashboard.agora.io)
+- Agora Video SDK for Android - available in the Agora.io Developer Center (https://docs.agora.io/en/Agora%20Platform/downloads)
