@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
     // Handle SDK Events
     private final IRtcEngineEventHandler mRtcEventHandler = new IRtcEngineEventHandler() {
         @Override
-        public void onFirstRemoteVideoDecoded(final int uid, int width, int height, int elapsed) {
+        public void onUserJoined(final int uid, int elapsed) {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -58,11 +58,11 @@ public class MainActivity extends AppCompatActivity {
 
         // remote user has toggled their video
         @Override
-        public void onUserMuteVideo(final int uid, final boolean toggle) { // Tutorial Step 10
+        public void onRemoteVideoStateChanged(final int uid, final int state, int reason, int elapsed) {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    onRemoteUserVideoToggle(uid, toggle);
+                    onRemoteUserVideoToggle(uid, state);
                 }
             });
         }
@@ -190,14 +190,14 @@ public class MainActivity extends AppCompatActivity {
         videoContainer.removeAllViews();
     }
 
-    private void onRemoteUserVideoToggle(int uid, boolean toggle) {
+    private void onRemoteUserVideoToggle(int uid, int state) {
         FrameLayout videoContainer = findViewById(R.id.bg_video_container);
 
         SurfaceView videoSurface = (SurfaceView) videoContainer.getChildAt(0);
-        videoSurface.setVisibility(toggle ? View.GONE : View.VISIBLE);
+        videoSurface.setVisibility(state == 0 ? View.GONE : View.VISIBLE);
 
         // add an icon to let the other user know remote video has been disabled
-        if(toggle){
+        if(state == 0){
             ImageView noCamera = new ImageView(this);
             noCamera.setImageResource(R.drawable.video_disabled);
             videoContainer.addView(noCamera);
