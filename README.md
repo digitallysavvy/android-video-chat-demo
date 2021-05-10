@@ -22,12 +22,23 @@ Within Android Studio, create a new Single Activity app.
 ## Step 3: Integrate the Agora SDK ##
 There are two ways to add the Agora Video SDK into your project. You can use [JCenter](https://mvnrepository.com/repos/jcenter) or you can manually add the SDK. For this project we'll add the project using JCenter. 
 
+Add the following line in your project level `build.gradle`: 
+```
+allprojects {
+    repositories {
+        ...
+        maven { url 'https://www.jitpack.io' }
+        ...
+    }
+}
+```
+ 
 Add the following line in the `/app/build.gradle` file of your project:
 ```
 dependencies {
     ...
     //Agora RTC SDK for video call
-    implementation 'io.agora.rtc:full-sdk:3.0.1'
+    implementation 'com.github.agorabuilder:native-full-sdk:3.4.1'
 }
 ```
 ![Agora SDK integration using JCenter](https://miro.medium.com/max/1400/1*y4a3LlgBivMETeN0dFxBHQ.png)
@@ -199,10 +210,11 @@ Earlier, I made a reference to the `RtcEngineEventHandler`, and now it’s time 
 // Handle SDK Events
 private final IRtcEngineEventHandler mRtcEventHandler = new IRtcEngineEventHandler() {
     @Override
-    public void onFirstRemoteVideoDecoded(final int uid, int width, int height, int elapsed) {
+    public void onUserJoined(final int uid, int elapsed) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                // set first remote user to the main bg video container
                 setupRemoteVideoStream(uid);
             }
         });
@@ -210,7 +222,7 @@ private final IRtcEngineEventHandler mRtcEventHandler = new IRtcEngineEventHandl
 
     // remote user has left channel
     @Override
-    public void onUserOffline(int uid, int reason) { 
+    public void onUserOffline(int uid, int reason) { // Tutorial Step 7
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -219,13 +231,13 @@ private final IRtcEngineEventHandler mRtcEventHandler = new IRtcEngineEventHandl
         });
     }
 
-    // remote stream has been toggled
-    @Override
-    public void onUserMuteVideo(final int uid, final boolean toggle) { // Tutorial Step 10
+    // remote user has toggled their video
+     @Override
+     public void onRemoteVideoStateChanged(final int uid, final int state, int reason, int elapsed) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                onRemoteUserVideoToggle(uid, toggle);
+                onRemoteUserVideoToggle(uid, state);
             }
         });
     }
@@ -235,14 +247,14 @@ private final IRtcEngineEventHandler mRtcEventHandler = new IRtcEngineEventHandl
 Each event triggers some fairly straight forward functions, including one we wrote in the previous step. In the interest of keeping this brief, I will provide the code below but I won’t give an in-depth breakdown.
 
 ```Java
-private void onRemoteUserVideoToggle(int uid, boolean toggle) {
+private void onRemoteUserVideoToggle(int uid, int state) {
     FrameLayout videoContainer = findViewById(R.id.bg_video_container);
 
     SurfaceView videoSurface = (SurfaceView) videoContainer.getChildAt(0);
-    videoSurface.setVisibility(toggle ? View.GONE : View.VISIBLE);
+    videoSurface.setVisibility(state == 0 ? View.GONE : View.VISIBLE);
 
     // add an icon to let the other user know remote video has been disabled
-    if(toggle){
+    if(state == 0){
         ImageView noCamera = new ImageView(this);
         noCamera.setImageResource(R.drawable.video_disabled);
         videoContainer.addView(noCamera);
