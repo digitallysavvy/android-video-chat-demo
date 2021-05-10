@@ -1,5 +1,5 @@
 # How to: Build a Video Chat App on Android
-![](https://miro.medium.com/max/1400/1*ClShkBecKfk93aWQM5ni_w.jpeg)  
+![](hhttps://www.agora.io/en/wp-content/uploads/2021/03/1-to-1-video-chat-app-on-android-using-agora.png)  
 In this repo, we’ll build a basic video chat app in 10 easy steps, using the [Agora.io Video SDK](https://docs.agora.io/en/Video/product_video?platform=All%20Platforms) for Android.
 
 ## Prerequisites ##
