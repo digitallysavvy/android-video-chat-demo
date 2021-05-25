@@ -5,7 +5,7 @@ In this repo, we’ll build a basic video chat app in 10 easy steps, using the [
 ## Prerequisites ##
 * [Android Studio](https://developer.android.com/studio)
 * [Basic knowledge of Java and the Android SDK](https://developer.android.com/training/basics/firstapp)
-* An [Agora.io Developer Account](http://console.agora.io)
+* An Agora Developer Account (see: How To Get Started with Agora)[https://www.agora.io/en/blog/how-to-get-started-with-agora?utm_source=devto&utm_medium=blog&&utm_campaign=How_To_Build_a_Video_Chat_App_on_Android]
 
 ## Step 1: Agora.io Account ##
 Once you finish the sign-up process, you will be redirected to the Dashboard. Open the Projects tab on the left-hand nav to see your default project’s App ID.
