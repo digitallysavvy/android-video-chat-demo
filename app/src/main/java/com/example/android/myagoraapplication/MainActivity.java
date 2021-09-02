@@ -3,24 +3,26 @@ package com.example.android.myagoraapplication;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.graphics.PorterDuff;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.SurfaceView;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import io.agora.rtc.Constants;
-import io.agora.rtc.IRtcEngineEventHandler;
-import io.agora.rtc.RtcEngine;
-import io.agora.rtc.video.VideoEncoderConfiguration;
-import io.agora.rtc.video.VideoCanvas;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
+import io.agora.rtc2.Constants;
+import io.agora.rtc2.IRtcEngineEventHandler;
+import io.agora.rtc2.RtcEngine;
+import io.agora.rtc2.video.VideoEncoderConfiguration;
+import io.agora.rtc2.video.VideoCanvas;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -107,26 +109,26 @@ public class MainActivity extends AppCompatActivity {
     private void setupLocalVideoFeed() {
 
         // setup the container for the local user
+        SurfaceView localView = new SurfaceView(getApplicationContext());
         FrameLayout videoContainer = findViewById(R.id.floating_video_container);
-        SurfaceView videoSurface = RtcEngine.CreateRendererView(getBaseContext());
-        videoSurface.setZOrderMediaOverlay(true);
-        videoContainer.addView(videoSurface);
-        mRtcEngine.setupLocalVideo(new VideoCanvas(videoSurface, VideoCanvas.RENDER_MODE_FIT, 0));
+        videoContainer.addView(localView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        localView.setZOrderMediaOverlay(true);
+        mRtcEngine.setupLocalVideo(new VideoCanvas(localView, VideoCanvas.RENDER_MODE_HIDDEN, 0));
     }
 
     private void setupRemoteVideoStream(int uid) {
+
+        SurfaceView remoteView = new SurfaceView(getApplicationContext());
         // setup ui element for the remote stream
-        FrameLayout videoContainer = findViewById(R.id.bg_video_container);
+        FrameLayout container = findViewById(R.id.bg_video_container);
         // ignore any new streams that join the session
-        if (videoContainer.getChildCount() >= 1) {
+        if (container.getChildCount() >= 1) {
             return;
         }
 
-        SurfaceView videoSurface = RtcEngine.CreateRendererView(getBaseContext());
-        videoContainer.addView(videoSurface);
-        mRtcEngine.setupRemoteVideo(new VideoCanvas(videoSurface, VideoCanvas.RENDER_MODE_FIT, uid));
-        mRtcEngine.setRemoteSubscribeFallbackOption(io.agora.rtc.Constants.STREAM_FALLBACK_OPTION_AUDIO_ONLY);
-
+        container.addView(remoteView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        mRtcEngine.setupRemoteVideo(new VideoCanvas(remoteView, VideoCanvas.RENDER_MODE_HIDDEN, uid));
+        mRtcEngine.setRemoteSubscribeFallbackOption(Constants.STREAM_FALLBACK_OPTION_VIDEO_STREAM_LOW);
     }
 
     public void onAudioMuteClicked(View view) {
@@ -165,6 +167,7 @@ public class MainActivity extends AppCompatActivity {
     public void onjoinChannelClicked(View view) {
         mRtcEngine.joinChannel(null, "test-channel", "Extra Optional Data", 0); // if you do not specify the uid, Agora will assign one.
         setupLocalVideoFeed();
+        mRtcEngine.startPreview();
         findViewById(R.id.joinBtn).setVisibility(View.GONE); // set the join button hidden
         findViewById(R.id.audioBtn).setVisibility(View.VISIBLE); // set the audio button hidden
         findViewById(R.id.leaveBtn).setVisibility(View.VISIBLE); // set the leave button hidden
@@ -172,6 +175,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onLeaveChannelClicked(View view) {
+        mRtcEngine.stopPreview();
         leaveChannel();
         removeVideo(R.id.floating_video_container);
         removeVideo(R.id.bg_video_container);

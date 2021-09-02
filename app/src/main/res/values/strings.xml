@@ -1,4 +1,4 @@
 <resources>
     <string name="app_name">Agora - 1:1 Video Call</string>
-    <string name="agora_app_id">AGORA_KEY</string>
+    <string name="agora_app_id">#ADD YOUR APP ID HERE#</string>
 </resources>
